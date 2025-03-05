@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chiroyli Blog - eng so‘nggi yangiliklar va maqolalar">
+    <meta name="keywords" content="blog, yangiliklar, maqolalar, uzbek">
+    <meta name="author" content="Chiroyli Blog Jamoasi">
+    <meta name="robots" content="index, follow">
+    <title>Chiroyli Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('https://images.pexels.com/photos/34950/pexels-photo.jpg') no-repeat center center/cover;
+            color: #fff;
+            line-height: 1.6;
+            position: relative;
+        }
+        .container {
+            transition: filter 0.3s ease;
+        }
+        .container.blur {
+            filter: blur(5px);
+        }
+        header {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        #search {
+            padding: 12px 20px;
+            width: 80%;
+            max-width: 500px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 30;
+        }
+        #search:focus {
+            width: 85%;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        }
+        main {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1400px;
+            margin: 20px auto;
+        }
+        .post {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        .post.highlighted {
+            border: 3px solid #00bcd4;
+        }
+        img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .post h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        .post p {
+            font-size: 0.9rem;
+            color: #555;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 100%;
+        }
+        .post a {
+            color: #1e90ff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .post a:hover {
+            color: #ff4500;
+        }
+        .post-buttons {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .post:hover .post-buttons {
+            display: block;
+        }
+        .post-buttons button {
+            padding: 5px 10px;
+            margin-left: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .delete-btn {
+            background: #ff4444;
+            color: #fff;
+        }
+        .edit-btn {
+            background: #00bcd4;
+            color: #fff;
+        }
+        #search-modal {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 500px;
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 25;
+            max-height: 50vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+        #search-results p {
+            margin: 10px 0;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        #search-results p:hover {
+            background: #f5f5f5;
+        }
+        #search-results a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            z-index: 10;
+        }
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        @media (max-width: 1200px) {
+            main { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 900px) {
+            main { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.5rem; }
+            #search { width: 90%; }
+            main { grid-template-columns: 1fr; }
+            .post { padding: 10px; }
+            .post h2 { font-size: 1.4rem; }
+            img { height: 100px; }
+            #search-modal { width: 90%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Chiroyli Blog</h1>
+        <nav>
+            <a href="#">Bosh sahifa</a>
+            <a href="create.html">Post yaratish</a>
+            <a href="#">Aloqa</a>
+        </nav>
+        <input type="text" id="search" placeholder="Qidirish...">
+    </header>
+    <div id="search-modal">
+        <div id="search-results"></div>
+    </div>
+    <div class="container">
+        <main id="posts"></main>
+    </div>
+    <footer>
+        <p>© 2023 Chiroyli Blog. Barcha huquqlar himoyalangan.</p>
+    </footer>
+
+    <script>
+        const API_URL = "https://blogpost-real-time.onrender.com/posts/";
+        const WS_URL = "wss://blogpost-real-time.onrender.com/ws/posts/";
+        const postsContainer = document.getElementById("posts");
+        const searchModal = document.getElementById("search-modal");
+        const searchInput = document.getElementById("search");
+        const searchResults = document.getElementById("search-results");
+        const container = document.querySelector(".container");
+
+        async function fetchPosts(query = "") {
+            const url = query ? `${API_URL}?search=${query}` : API_URL;
+            const response = await fetch(url);
+            const posts = await response.json();
+            renderPosts(posts);
+
+            // SEO uchun meta teglarni yangilash
+            document.querySelector('meta[name="description"]').content = posts.length > 0 ? 
+                `Chiroyli Blog - ${posts.map(p => p.title).join(", ")}` : "Chiroyli Blog - eng so‘nggi yangiliklar";
+            document.querySelector('meta[name="keywords"]').content = posts.length > 0 ? 
+                posts.map(p => p.title).join(", ") : "blog, yangiliklar, maqolalar, uzbek";
+        }
+
+        function renderPosts(posts) {
+            postsContainer.innerHTML = "";
+            posts.forEach(post => {
+                const truncatedDescription = post.description.length > 50 ? 
+                    post.description.substring(0, 50) + "..." : post.description;
+                postsContainer.innerHTML += `
+                    <article class="post" data-id="${post.id}" id="post-${post.id}">
+                        <img src="${post.image}" alt="${post.title}">
+                        <h2>${post.title}</h2>
+                        <p>${formatMarkdown(truncatedDescription)}</p>
+                        <a href="post.html?id=${post.id}">Batafsil</a>
+                        <div class="post-buttons">
+                            <button class="delete-btn" onclick="window.location.href='delete.html?id=${post.id}'">Delete</button>
+                            <button class="edit-btn" onclick="window.location.href='edit.html?id=${post.id}'">Edit</button>
+                        </div>
+                    </article>
+                `;
+            });
+        }
+
+        function formatMarkdown(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+                .replace(/\*(.*?)\*/g, '<i>$1</i>')
+                .replace(/```(.*?)```/gs, '<pre>$1</pre>');
+        }
+
+        function highlightAndNavigate(postId) {
+            const postElement = document.getElementById(`post-${postId}`);
+            if (postElement) {
+                document.querySelectorAll(".post").forEach(post => post.classList.remove("highlighted"));
+                postElement.classList.add("highlighted");
+                postElement.scrollIntoView({ behavior: "smooth", block: "center" });
+                setTimeout(() => {
+                    window.location.href = `post.html?id=${postId}`;
+                }, 500);
+            } else {
+                window.location.href = `post.html?id=${postId}`;
+            }
+        }
+
+        searchInput.addEventListener("focus", () => {
+            container.classList.add("blur");
+            if (searchInput.value.trim()) searchModal.style.display = "block";
+        });
+
+        searchInput.addEventListener("blur", () => {
+            setTimeout(() => {
+                if (!searchModal.contains(document.activeElement)) {
+                    searchModal.style.display = "none";
+                    container.classList.remove("blur");
+                }
+            }, 100);
+        });
+
+        searchInput.addEventListener("input", async (e) => {
+            const query = e.target.value.trim();
+            if (!query) {
+                searchModal.style.display = "none";
+                fetchPosts();
+                return;
+            }
+            searchModal.style.display = "block";
+            const response = await fetch(`${API_URL}?search=${query}`);
+            const posts = await response.json();
+            renderPosts(posts); // Sahifani qidiruv natijalari bilan yangilash
+            searchResults.innerHTML = posts.map(post => `
+                <p onclick="highlightAndNavigate('${post.id}')">
+                    <a href="post.html?id=${post.id}">${post.title}</a>
+                </p>
+            `).join("");
+        });
+
+        // Har 1 soatda GET so‘rovi
+        setInterval(() => fetchPosts(), 3600000);
+
+        // WebSocket ulanishi
+        const socket = new WebSocket(WS_URL);
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.type === "post_update") {
+                fetchPosts();
+            }
+        };
+        socket.onopen = () => console.log("WebSocket ulandi");
+        socket.onerror = (error) => console.error("WebSocket xatosi:", error);
+
+        fetchPosts();
+    </script>
+</body>
+</html>

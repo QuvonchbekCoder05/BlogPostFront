@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Tahrirlash</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('https://source.unsplash.com/random/1600x900/?technology') no-repeat center center/cover;
+            color: #fff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        header {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .content-wrapper {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 20px auto;
+        }
+        .container {
+            width: 50%;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        .preview {
+            width: 50%;
+            padding: 25px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            text-align: left;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1rem;
+            outline: none;
+            transition: box-shadow 0.3s ease;
+        }
+        input[type="file"] {
+            padding: 8px;
+        }
+        input:focus, textarea:focus {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        button {
+            padding: 12px 25px;
+            background: #00bcd4;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #008c9e;
+        }
+        pre {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 5px solid #00ff00;
+        }
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            width: 100%;
+            z-index: 10;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+        }
+        .loader {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 5px solid #fff;
+            border-top: 5px solid #00bcd4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+        }
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #4caf50;
+            color: #fff;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            z-index: 100;
+            animation: fadeInOut 2s ease-in-out;
+        }
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -60%); }
+            20% { opacity: 1; transform: translate(-50%, -50%); }
+            80% { opacity: 1; transform: translate(-50%, -50%); }
+            100% { opacity: 0; transform: translate(-50%, -40%); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Chiroyli Blog</h1>
+        <nav>
+            <a href="index.html">Bosh sahifa</a>
+            <a href="create.html">Post yaratish</a>
+            <a href="#">Aloqa</a>
+        </nav>
+    </header>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <h1>Post Tahrirlash</h1>
+            <form id="editForm">
+                <input type="text" id="title" placeholder="Sarlavha" required oninput="updatePreview()">
+                <textarea id="description" placeholder="Qisqacha Tavsif" required oninput="updatePreview()"></textarea>
+                <textarea id="content" placeholder="To‘liq Matn" required oninput="updatePreview()"></textarea>
+                <input type="file" id="image" accept="image/*" onchange="updatePreview()">
+                <input type="file" id="background_image" accept="image/*" onchange="updatePreview()">
+                <button type="submit" id="saveButton">Saqlash</button>
+            </form>
+        </div>
+
+        <div class="preview" id="preview">
+            <h1 id="preview-title">Sarlavha</h1>
+            <p id="preview-description" style="font-style: italic;">Qisqacha tavsif</p>
+            <div id="preview-content">Matn...</div>
+            <img id="preview-image" src="" width="100%" style="display:none; border-radius: 8px; margin-bottom: 15px;">
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2023 Chiroyli Blog. Barcha huquqlar himoyalangan.</p>
+    </footer>
+
+    <div class="loader" id="loader"></div>
+    <div class="success-message" id="successMessage">Yangilandi</div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const postId = params.get("id");
+
+        async function fetchPost() {
+            const response = await fetch(`http://127.0.0.1:8000/posts/${postId}/`);
+            const post = await response.json();
+            document.getElementById("title").value = post.title;
+            document.getElementById("description").value = post.description;
+            document.getElementById("content").value = post.content;
+            updatePreview();
+        }
+
+        function updatePreview() {
+            document.getElementById("preview-title").textContent = document.getElementById("title").value || "Sarlavha";
+            document.getElementById("preview-description").textContent = document.getElementById("description").value || "Qisqacha tavsif";
+            const content = document.getElementById("content").value;
+            document.getElementById("preview-content").innerHTML = content ? formatMarkdown(content) : "Matn...";
+
+            const imageInput = document.getElementById("image");
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("preview-image").src = e.target.result;
+                    document.getElementById("preview-image").style.display = "block";
+                };
+                reader.readAsDataURL(imageInput.files[0]);
+            }
+
+            const bgImageInput = document.getElementById("background_image");
+            if (bgImageInput.files && bgImageInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("preview").style.backgroundImage = `url(${e.target.result})`;
+                };
+                reader.readAsDataURL(bgImageInput.files[0]);
+            }
+        }
+
+        function formatMarkdown(text) {
+            return text
+                .replace(/```(.*?)```/gs, '<pre>$1</pre>')
+                .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+                .replace(/\*(.*?)\*/g, '<i>$1</i>');
+        }
+
+        document.getElementById("editForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const loader = document.getElementById("loader");
+            const successMessage = document.getElementById("successMessage");
+            const saveButton = document.getElementById("saveButton");
+
+            loader.style.display = "block";
+            saveButton.disabled = true;
+
+            const formData = new FormData();
+            formData.append("title", document.getElementById("title").value);
+            formData.append("description", document.getElementById("description").value);
+            formData.append("content", document.getElementById("content").value);
+            if (document.getElementById("image").files[0]) {
+                formData.append("image", document.getElementById("image").files[0]);
+            }
+            if (document.getElementById("background_image").files[0]) {
+                formData.append("background_image", document.getElementById("background_image").files[0]);
+            }
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/posts/${postId}/`, {
+                    method: "PUT",
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    loader.style.display = "none";
+                    successMessage.style.display = "block";
+                    setTimeout(() => {
+                        successMessage.style.display = "none";
+                        window.location.href = "index.html";
+                    }, 2000);
+                } else {
+                    throw new Error("Yangilashda xatolik");
+                }
+            } catch (error) {
+                console.error(error);
+                loader.style.display = "none";
+                saveButton.disabled = false;
+                alert("Xatolik yuz berdi!");
+            }
+        });
+
+        fetchPost();
+    </script>
+</body>
+</html>
